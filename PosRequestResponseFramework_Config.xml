@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PosRequestResponseFramework>
+    <LocalRequestDispatcher>
+        <Handler HandlerProgId="Compris.PosRR.EchoTopicHandler" TopicFilter="/compris/posrr/defaultchannel/echo" ChannelFactoryProgId="Compris.PosRR.DefaultChannelFactory" ForceToRemote="0"/>
+        <Handler HandlerProgId="Compris.PosRR.RunConEXE" TopicFilter="/compris/posrr/defaultchannel/runconexe" ChannelFactoryProgId="Compris.PosRR.DefaultChannelFactory" ForceToRemote="1"/>
+        <Handler HandlerProgId="Compris.PosRR.RemoteHandler" TopicFilter="/compris/posrr/*" ChannelFactoryProgId="Compris.PosRR.DefaultChannelFactory" ForceToRemote="0"/>
+        <Handler HandlerProgId="Compris.AddressHandler.Site5Handler" TopicFilter="/compris/commcenter/addresshandler" ChannelFactoryProgId="Compris.PosRR.DefaultChannelFactory" ForceToRemote="0"/>
+        <Handler HandlerProgId="Compris.OrderHandler.Site5Handler" TopicFilter="/compris/commcenter/orderhandlersite5" ChannelFactoryProgId="Compris.PosRR.DefaultChannelFactory" ForceToRemote="0"/>
+        <Handler HandlerProgId="Compris.OrderHandler.AutomationHandler" TopicFilter="/compris/commcenter/orderhandlerauto" ChannelFactoryProgId="Compris.PosRR.LocSvrChannelFactory" ForceToRemote="1"/>
+        <Handler HandlerProgId="Compris.OrderHandler.DbgWndMsgHandler" TopicFilter="/compris/commcenter/orderhandlerremotedbgwndmsg" ChannelFactoryProgId="Compris.PosRR.LocSvrChannelFactory" ForceToRemote="1"/>
+        <Handler HandlerProgId="Compris.PosRR.RemoteHandler" TopicFilter="/compris/commcenter/*" ChannelFactoryProgId="Compris.PosRR.DefaultChannelFactory" ForceToRemote="0"/>
+    </LocalRequestDispatcher>
+    <RemoteRequestDispatcher>
+        <Route TopicFilter="/compris/posrr/*">
+            <Server Name="localhost" Port="5800" Priority="1"/>
+        </Route>
+        <Route TopicFilter="/compris/commcenter/*">
+            <Server Name="pos3" Port="5800" Priority="1"/>
+            <Server Name="pos1" Port="5800" Priority="2"/>
+        </Route>
+    </RemoteRequestDispatcher>
+    <RemoteRequestService>
+        <Instance Name="Default" ListenPort="5800"/>
+    </RemoteRequestService>
+</PosRequestResponseFramework>
