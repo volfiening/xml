@@ -21,6 +21,9 @@ class FixService(win32serviceutil.ServiceFramework):
         self.logger = self._getLogger()
         self.isAlive=True
         self.pos = self._getPos()#隐含pos
+        self.case_log_dir = r'D:\YUM\OC\OrderCenterStoreService\CASE_Log'#路径
+        self.current_time = time.strftime('%Y%m%d',time.localtime(time.time()))#当前时间
+        self.case_log_file = os.path.join(self.case_log_dir,'CASE_' + self.current_time + '.log')#文件
 
     def _getLogger(self):
         #logdir = os.path.abspath(os.path.dirname(inspect.getfile(inspect.currentframe())))#日志目录
@@ -34,10 +37,7 @@ class FixService(win32serviceutil.ServiceFramework):
         return logger 
 
     def _getPos(self): 
-        case_log_dir=r'D:\YUM\OC\OrderCenterStoreService\CASE_Log'#路径
-        current_time = time.strftime('%Y%m%d',time.localtime(time.time()))#当前时间
-        case_log_file = os.path.join(case_log_dir,'CASE_' + current_time + '.log')#文件
-        if os.path.exists(case_log_file):
+        if os.path.exists(self.case_log_file):
             tree = et.parse(r'c:\PosRequestResponseFramework_Config.xml')
             root = tree.getroot()
             pn = re.compile(r"/commcenter/[*]$")
@@ -46,7 +46,7 @@ class FixService(win32serviceutil.ServiceFramework):
                     #print(item.attrib['TopicFilter'])
                     for name in item.findall('Server'):#找到server下的pos机名
                         # print(name.attrib['Name'])
-                        # print(case_log_file)
+                        # print(self.case_log_file)
                         # pos.append(name.attrib['Name'])
                         if name.attrib['Priority'] == '1':#第一隐含pos
                             return name.attrib['Name']
@@ -74,13 +74,17 @@ class FixService(win32serviceutil.ServiceFramework):
         self.timeout=1000
         self.logger.info('service is begin...')
 
+        
         while self.isAlive:
             # wait for service stop signal, if timeout, loop again
             rc=win32event.WaitForSingleObject(self.hWaitStop, self.timeout)
             
             #---------------------
             
-            self.logger.info(self.pos)
+            with open(self.case_log_file,'r') as f:
+
+            self.logger.info(self.pos)#重启pos机
+
             
             time.sleep(2)
             #---------------------
