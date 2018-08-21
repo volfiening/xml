@@ -4,7 +4,7 @@ block_cipher = None
 
 
 a = Analysis(['st.py'],
-             pathex=['C:\\Users\\ncd2111\\Desktop\\xml'],
+             pathex=['C:\\users\\ncd2111\\Desktop\\xml'],
              binaries=[],
              datas=[],
              hiddenimports=[],
